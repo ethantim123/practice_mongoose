@@ -58,32 +58,67 @@ const studentSchema = new mongoose.Schema({
         merit: {
             type: Number,
             default: 0,
+            min: [0, "Are you trying to enter negative numbers?"],
+            max: 5000,
         },
         other: {
             type: Number,
+            min: 0,
             default: 0,
         }
     },
 });
 
-// model for students
+// create an instance method
+studentSchema.methods.totalScholarship = function () {
+    return this.scholarship.merit + this.scholarship.other;
+};
+
+
+// create a model for students
 const Student = mongoose.model("Student", studentSchema);
 
-const newStudent = new Student({
-    name: "Nelson Cruz",
-    age: 18,
-    major: "Political Science",
-    scholarship: { merit: "1500", other: "2000"},
-    isMarried: true, //不再schema內不會被存進資料庫
-});
-newStudent.save()
-    .then(() => {
-        console.log("Date has been saved");
-    })
-    .catch((e) => {
-        console.log("error has happened");
-        console.log(e);
-    });
+
+// use instance method
+Student.findOne({ name: "Eric Aaron" }).then((data) => {
+    let result = data.totalScholarship();
+    console.log(result);
+}).catch( e => {
+    console.log("error!!!!");
+    console.log(e);
+})
+
+//runValidators: true -->update時附加此條件才會再檢驗validator
+// Student.findOneAndUpdate(
+//     { name: "Eric Aaron"},
+//     { "scholarship.merit": 50000 },
+//     { new: true, runValidators: true }
+// )
+//     .then((meg) => {
+//         console.log(meg);
+//     })
+//     .catch((e) => {
+//         console.log("Update failed.");
+//         console.log(e);
+//     });
+
+
+//不再schema內不會被存進資料庫
+// const newStudent = new Student({
+//     name: "Nelson Cruz",
+//     age: 18,
+//     major: "Political Science",
+//     scholarship: { merit: "1500", other: "2000"},
+//     isMarried: true, 
+// });
+// newStudent.save()
+//     .then(() => {
+//         console.log("Date has been saved");
+//     })
+//     .catch((e) => {
+//         console.log("error has happened");
+//         console.log(e);
+//     });
 
 // insert---------------------------------------------------------------
 // create an object
