@@ -17,6 +17,40 @@ mongoose
         console.log(err);
     });
 
+//define a schema
+const studentSchema = new mongoose.Schema({
+    name: String,
+    age: Number,
+    major: String,
+    scholarship: {
+        merit: Number,
+        other: Number,
+    },
+});
+
+// model for students
+const Student = mongoose.model("Student", studentSchema);
+
+// create an object
+// const Jon = new Student({
+//     name: "Jon Benson",
+//     age: 25,
+//     major: "EE",
+//     scholarship: { merit:2500, other: 1300 },
+// });
+
+// save Jon to DB
+// Jon.save()
+//     .then(() => {
+//         console.log("Jon has been saved into DB.");
+//     })
+//     .catch((e) => {
+//         console.log("error has happened.");
+//         console.log(e);
+//     });
+
+
+
 
 app.use(express.static("public"));
 
